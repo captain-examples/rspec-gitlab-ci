@@ -1,3 +1,3 @@
-# RSpec-Circle CI example
+# RSpec<->GitLab CI example
 
-see [.circleci/config.yml](.circleci/config.yml) for the Circle CI configuration!
+see [.gitlab-ci.yml](.gitlab-ci.yml) for the gitlab CI configuration!

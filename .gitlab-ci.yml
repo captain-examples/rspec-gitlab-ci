@@ -1,10 +1,93 @@
 image: ruby:3.1.2
 
-
 before_script:
   - ruby -v
   - bundle install --jobs $(nproc)
+  # download captain
+  - arch=x86_64 # Supported values are x86_64 or aarch64
+  - os=linux # Supported values are linux or darwin
+  - tmp="$(mktemp -d)/captain"
+  - curl -o $tmp -fsSL "https://releases.captain.build/v1/$os/$arch/captain"
+  - install $tmp /usr/local/bin
+  - rm $tmp
+  - captain --version
 
 rspec:
   script:
-    - bundle exec rspec
+    - captain run
+      --suite-id rspec
+      --test-results tmp/rspec.json
+      --reporter junit-xml=tmp/rspec.xml
+      -- bundle exec rspec --format json --out tmp/rspec.json --format progress
+  artifacts:
+    when: always
+    paths:
+      - tmp/rspec.xml
+    reports:
+      junit: tmp/rspec.xml
+
+rspec-with-retries:
+  script:
+    - captain run
+      --suite-id rspec
+      --test-results tmp/rspec.json
+      --retries 2
+      --retry-command "bundle exec rspec --format json --out tmp/rspec.json --format progress {{ tests }}"
+      --reporter junit-xml=tmp/rspec.xml
+      -- bundle exec rspec --format json --out tmp/rspec.json --format progress
+  artifacts:
+    when: always
+    paths:
+      - tmp/rspec.xml
+    reports:
+      junit: tmp/rspec.xml
+
+rspec-with-partitioning:
+  parallel: 2
+  script:
+    - suite_id="rspec"
+    - test_files=$(
+      captain partition
+      --suite-id $suite_id
+      --index $((CI_NODE_INDEX-1))
+      --total $CI_NODE_TOTAL
+      "spec/**/*_spec.rb"
+      )
+    - captain run
+      --suite-id $suite_id
+      --test-results tmp/rspec.json
+      --reporter junit-xml=tmp/rspec.xml
+      -- bundle exec rspec --format json --out tmp/rspec.json --format progress $test_files
+  artifacts:
+    when: always
+    paths:
+      - tmp/rspec.xml
+    reports:
+      junit: tmp/rspec.xml
+
+rspec-with-partitioning-and-retries:
+  parallel: 2
+  script:
+    - suite_id="rspec"
+    - test_files=$(
+      captain partition
+      --suite-id $suite_id
+      --index $((CI_NODE_INDEX-1))
+      --total $CI_NODE_TOTAL
+      "spec/**/*_spec.rb"
+      )
+    - captain run
+      --suite-id $suite_id
+      --test-results tmp/rspec.json
+      --retries 2
+      --retry-command "bundle exec rspec --format json --out tmp/rspec.json --format progress {{ tests }}"
+      --print-summary
+      --reporter junit-xml=tmp/rspec.xml
+      -- bundle exec rspec --format json --out tmp/rspec.json --format progress $test_files
+
+  artifacts:
+    when: always
+    paths:
+      - tmp/rspec.xml
+    reports:
+      junit: tmp/rspec.xml
