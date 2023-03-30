@@ -18,9 +18,9 @@ rspec:
   artifacts:
     when: always
     paths:
-      - tmp/rspec.xml
+      - tmp/junit.xml
     reports:
-      junit: tmp/rspec.xml
+      junit: tmp/junit.xml
 
 rspec-with-retries:
   script:
@@ -28,9 +28,9 @@ rspec-with-retries:
   artifacts:
     when: always
     paths:
-      - tmp/rspec.xml
+      - tmp/junit.xml
     reports:
-      junit: tmp/rspec.xml
+      junit: tmp/junit.xml
 
 rspec-with-partitioning:
   parallel: 2
@@ -47,9 +47,9 @@ rspec-with-partitioning:
   artifacts:
     when: always
     paths:
-      - tmp/rspec.xml
+      - tmp/junit.xml
     reports:
-      junit: tmp/rspec.xml
+      junit: tmp/junit.xml
 
 rspec-with-partitioning-and-retries:
   parallel: 2
@@ -67,6 +67,6 @@ rspec-with-partitioning-and-retries:
   artifacts:
     when: always
     paths:
-      - tmp/rspec.xml
+      - tmp/junit.xml
     reports:
-      junit: tmp/rspec.xml
+      junit: tmp/junit.xml
