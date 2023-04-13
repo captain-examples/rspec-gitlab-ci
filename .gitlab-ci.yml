@@ -38,8 +38,6 @@ rspec-with-partitioning:
     - export CAPTAIN_SUITE_ID="captain-examples-rspec"
     - test_files=$(
       captain partition
-      --index $((CI_NODE_INDEX-1))
-      --total $CI_NODE_TOTAL
       "spec/**/*_spec.rb"
       )
     - captain run -- $test_files
@@ -56,8 +54,6 @@ rspec-with-partitioning-and-retries:
     - export CAPTAIN_SUITE_ID="captain-examples-rspec-retries"
     - test_files=$(
       captain partition
-      --index $((CI_NODE_INDEX-1))
-      --total $CI_NODE_TOTAL
       "spec/**/*_spec.rb"
       )
     - captain run -- $test_files
