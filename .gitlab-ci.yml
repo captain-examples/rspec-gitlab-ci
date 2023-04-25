@@ -36,11 +36,7 @@ rspec-with-partitioning:
   parallel: 2
   script:
     - export CAPTAIN_SUITE_ID="captain-examples-rspec"
-    - test_files=$(
-      captain partition
-      "spec/**/*_spec.rb"
-      )
-    - captain run -- $test_files
+    - captain run
   artifacts:
     when: always
     paths:
@@ -52,11 +48,7 @@ rspec-with-partitioning-and-retries:
   parallel: 2
   script:
     - export CAPTAIN_SUITE_ID="captain-examples-rspec-retries"
-    - test_files=$(
-      captain partition
-      "spec/**/*_spec.rb"
-      )
-    - captain run -- $test_files
+    - captain run
 
   artifacts:
     when: always
