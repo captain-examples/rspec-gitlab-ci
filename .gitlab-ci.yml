@@ -35,8 +35,7 @@ rspec-with-retries:
 rspec-with-partitioning:
   parallel: 2
   script:
-    - export CAPTAIN_SUITE_ID="captain-examples-rspec"
-    - captain run
+    - captain run captain-examples-rspec-partition
   artifacts:
     when: always
     paths:
@@ -47,8 +46,7 @@ rspec-with-partitioning:
 rspec-with-partitioning-and-retries:
   parallel: 2
   script:
-    - export CAPTAIN_SUITE_ID="captain-examples-rspec-retries"
-    - captain run
+    - captain run captain-examples-rspec-partition-retries
 
   artifacts:
     when: always
